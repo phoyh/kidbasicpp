@@ -3131,7 +3131,10 @@ Interpreter::execByteCode()
 		{
 			op++;
 			mutex->lock();
-			emit(playWAV(stack.popstring()));
+			int loopNum = stack.popint();
+			QString fileName = stack.popstring();
+			int channel = stack.popint();
+			emit(playWAV(channel,fileName,loopNum));
 			waitCond->wait(mutex);
 			mutex->unlock();
 		}
@@ -3141,7 +3144,7 @@ Interpreter::execByteCode()
 		{
 			op++;
 			mutex->lock();
-			emit(stopWAV());
+			emit(stopWAV(stack.popint()));
 			waitCond->wait(mutex);
 			mutex->unlock();
 		}
@@ -4221,7 +4224,7 @@ Interpreter::execByteCode()
 				{
 					op++;
 					mutex->lock();
-					emit(waitWAV());
+					emit(waitWAV(stack.popint()));
 					waitCond->wait(mutex);
 					mutex->unlock();
 				}

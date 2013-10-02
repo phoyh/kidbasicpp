@@ -102,6 +102,7 @@ RunController::RunController()
 
 	replacewin = NULL;
 	docwin = NULL;
+	maxChannel = -1;
 	
 	#ifdef USEQSOUND
 		wavsound = new QSound(QString(""));
@@ -120,11 +121,11 @@ RunController::RunController()
 	QObject::connect(i, SIGNAL(mainWindowsResize(int, int, int)), this, SLOT(mainWindowsResize(int, int, int)));
 	QObject::connect(i, SIGNAL(mainWindowsVisible(int, bool)), this, SLOT(mainWindowsVisible(int, bool)));
 	QObject::connect(i, SIGNAL(outputReady(QString)), this, SLOT(outputReady(QString)));
-	QObject::connect(i, SIGNAL(playWAV(QString)), this, SLOT(playWAV(QString)));
+	QObject::connect(i, SIGNAL(playWAV(int,QString,int)), this, SLOT(playWAV(int,QString,int)));
 	QObject::connect(i, SIGNAL(stopRun()), this, SLOT(stopRun()));
 	QObject::connect(i, SIGNAL(speakWords(QString)), this, SLOT(speakWords(QString)));
-	QObject::connect(i, SIGNAL(stopWAV()), this, SLOT(stopWAV()));
-	QObject::connect(i, SIGNAL(waitWAV()), this, SLOT(waitWAV()));
+	QObject::connect(i, SIGNAL(stopWAV(int)), this, SLOT(stopWAV(int)));
+	QObject::connect(i, SIGNAL(waitWAV(int)), this, SLOT(waitWAV(int)));
 	
 	QObject::connect(i, SIGNAL(getInput()), outwin, SLOT(getInput()));
 
@@ -266,24 +267,25 @@ RunController::executeSystem(QString text)
 	//fprintf(stderr,"system af %s\n", text);
 }
 
-void RunController::playWAV(QString file)
+void RunController::playWAV(int channel,QString file,int loopNum)
 {
 	mutex->lock();
 	#ifdef USEQSOUND
 		printf("Trying to play sound in qsound %s\n",(char *) file.toUtf8().data());
 		wavsound->play(file);
 	#endif
-		Mix_HaltChannel(SDL_CHAN_WAV);
+		Mix_HaltChannel(channel+SDL_CHAN_WAV);
 		Mix_Chunk *music;
     	music = Mix_LoadWAV((char *) file.toUtf8().data());
 		if (music == NULL) printf("Could not resolve file %s\n",(char *) file.toUtf8().data());
-    	Mix_PlayChannel(SDL_CHAN_WAV,music,0);
+		if (channel > maxChannel) maxChannel = channel;
+    	Mix_PlayChannel(channel+SDL_CHAN_WAV,music,loopNum);
 	waitCond->wakeAll();
 	mutex->unlock();
 }
 
 
-void RunController::waitWAV()
+void RunController::waitWAV(int channel)
 {
 	mutex->lock();
 	#ifdef USEQSOUND
@@ -294,7 +296,7 @@ void RunController::waitWAV()
 			usleep(1000);
 		#endif
 	#endif
-		while(Mix_Playing(SDL_CHAN_WAV))
+		while(Mix_Playing(channel+SDL_CHAN_WAV))
 		#ifdef WIN32
 			Sleep(1);
 		#else
@@ -304,13 +306,13 @@ void RunController::waitWAV()
 	mutex->unlock();
 }
 
-void RunController::stopWAV()
+void RunController::stopWAV(int channel)
 {
 	mutex->lock();
 	#ifdef USEQSOUND
 		wavsound->stop();
 	#endif
-		Mix_HaltChannel(SDL_CHAN_WAV);
+		Mix_HaltChannel(channel+SDL_CHAN_WAV);
 	waitCond->wakeAll();
 	mutex->unlock();
 }
@@ -424,7 +426,10 @@ RunController::stopRun()
 	mainwin->stepact->setEnabled(false);
 	mainwin->stopact->setEnabled(false);
 
-	stopWAV();
+	if (maxChannel >= 0) {
+		int i;
+		for (i = 0 ; i <= maxChannel ; i++) stopWAV(i);
+	}
 
 	mutex->lock();
 	outwin->setReadOnly(true);

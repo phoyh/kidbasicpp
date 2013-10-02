@@ -55,9 +55,9 @@ class RunController : public QObject
  public slots:
   void speakWords(QString);
   void executeSystem(QString);
-  void playWAV(QString);
-  void stopWAV();
-  void waitWAV();
+  void playWAV(int,QString,int);
+  void stopWAV(int);
+  void waitWAV(int);
   void inputEntered(QString text);
   void outputReady(QString text);
   void outputClear();
@@ -88,6 +88,7 @@ class RunController : public QObject
  private:
   Interpreter *i;
   bool paused;
+  int maxChannel;
   run_status oldStatus;
   QString bytefilename;
 };
