@@ -1014,7 +1014,6 @@ Interpreter::compileProgram(char *code)
 		return -1;
 	}
 
-
 	int result = basicParse(code);
 	if (result < 0)
 	{
@@ -1142,13 +1141,22 @@ Interpreter::compileProgram(char *code)
 			// before execution
 			int *i = (int *) op;
 			op += sizeof(int);
-			if (labeltable[*i] >=0)
+			if (*i >= 0 && labeltable[*i] >=0)
 			{
 				int tbloff = *i;
 				*i = labeltable[tbloff];
 			}
 			else
 			{
+				int byteCodeOffset = op-sizeof(int)-byteCode;
+				if (*i<0)
+				{
+					printf("Byte-code offset %d: Illegal offset to labeltable: %d\n",byteCodeOffset,*i);
+				}
+				else
+				{
+					printf("Byte-code offset %d: Illegal labeltable content at offset %d: %d\n",byteCodeOffset,*i,labeltable[*i]);
+				}
 				printError(ERROR_NOSUCHLABEL,"");
 				return -1;
 			}

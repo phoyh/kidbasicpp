@@ -31,8 +31,8 @@
 #include "../Version.h"
 
 
-#define SYMTABLESIZE 2000
-#define IFTABLESIZE 1000
+#define SYMTABLESIZE 10000
+#define IFTABLESIZE 10000
 
 extern int yylex();
 extern char *yytext;
@@ -203,7 +203,7 @@ newByteCode(unsigned int size) {
 	if (byteCode) {
 		free(byteCode);
 	}
-	maxbyteoffset = 1024;
+	maxbyteoffset = 1024000;
 	byteCode = malloc(maxbyteoffset);
 
 	if (byteCode) {
