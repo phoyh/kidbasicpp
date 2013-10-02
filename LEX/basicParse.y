@@ -1594,15 +1594,15 @@ printstmt: B256PRINT {
 	}
 ;
 
-wavplaystmt: B256WAVPLAY stringexpr {addOp(OP_WAVPLAY);  }
+wavplaystmt: B256WAVPLAY floatexpr ',' stringexpr ',' floatexpr {addOp(OP_WAVPLAY);  }
 ;
 
-wavstopstmt: B256WAVSTOP { addOp(OP_WAVSTOP); }
-	| B256WAVSTOP '(' ')' { addOp(OP_WAVSTOP); }
+wavstopstmt: B256WAVSTOP floatexpr { addOp(OP_WAVSTOP); }
+	| B256WAVSTOP '(' floatexpr ')' { addOp(OP_WAVSTOP); }
 ;
 
-wavwaitstmt: B256WAVWAIT { addExtendedOp(OPX_WAVWAIT); }
-	| B256WAVWAIT '(' ')' { addExtendedOp(OPX_WAVWAIT); }
+wavwaitstmt: B256WAVWAIT floatexpr { addExtendedOp(OPX_WAVWAIT); }
+	| B256WAVWAIT '(' floatexpr ')' { addExtendedOp(OPX_WAVWAIT); }
 ;
 
 putslicestmt: B256PUTSLICE floatexpr ',' floatexpr ',' stringexpr  {addOp(OP_PUTSLICE);  }

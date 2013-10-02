@@ -10,8 +10,8 @@
 	#include <unistd.h>
 	#include <SDL/SDL.h>
 	#include <SDL/SDL_mixer.h>
-	#define SDL_CHAN_WAV 1
-	#define SDL_CHAN_SOUND 2
+	#define SDL_CHAN_SOUND 1
+	#define SDL_CHAN_WAV 2
 	#define SOUND_HALFWAVE 0x7f
 #endif
 
