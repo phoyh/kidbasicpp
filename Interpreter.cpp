@@ -101,6 +101,7 @@ extern "C" {
 
 Interpreter::Interpreter()
 {
+   isExitOnEndMode = false;
 	fastgraphics = false;
 	directorypointer=NULL;
 	status = R_STOPPED;
@@ -1354,6 +1355,10 @@ Interpreter::runHalted()
 	status = R_STOPPED;
 }
 
+void Interpreter::exitOnEndMode()
+{
+	isExitOnEndMode = true;
+}
 
 void
 Interpreter::run()
@@ -1459,7 +1464,12 @@ Interpreter::execByteCode()
 
 	case OP_END:
 		{
-			return -1;
+			if (isExitOnEndMode) {
+				printf("End statement reached - exit as requested\n");
+				abort();
+			} else {
+				return -1;
+			}
 		}
 		break;
 

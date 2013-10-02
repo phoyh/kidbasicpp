@@ -55,7 +55,6 @@ QMutex* debugmutex;
 QWaitCondition* waitCond;
 QWaitCondition* waitDebugCond;
 
-
 // the three main components of the UI (define globally)
 MainWindow * mainwin;
 BasicEdit * editwin;
@@ -470,6 +469,11 @@ void MainWindow::updateRecent()
 			recentact[i]->setVisible(false);		
 		}
 	}
+}
+
+void MainWindow::exitOnEndMode()
+{
+	rc->exitOnEndMode();
 }
 
 void MainWindow::loadAndGoMode()
