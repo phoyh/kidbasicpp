@@ -231,11 +231,28 @@ newByteCode(unsigned int size) {
 
 void
 checkByteMem(unsigned int addedbytes) {
+	/*
+	if (byteOffset > 77445 && byteOffset < 77485)
+	{
+		printf("About to add memory at offset %d, bytes requested: %d\n",byteOffset,addedbytes);
+		printf("Bytes around current position: ");
+		int i;
+		for (i = byteOffset - 20 ; i < byteOffset + 10 ; i++)
+		{
+			unsigned char byte = (unsigned char *) *(i+byteCode);
+			if ( i == byteOffset ) printf("[[");
+			printf("%d/",(int)byte);
+			if ( i == byteOffset ) printf("]] ");
+		}
+		printf("\n");
+	}
+	*/
+	
 	if (byteOffset + addedbytes + 1 >= maxbyteoffset) {
 		maxbyteoffset += maxbyteoffset + addedbytes + 32;
-		printf("Byte-code memory area (before %p) size increased to %d",byteCode,maxbyteoffset);
+		//printf("Byte-code memory area (before %p) size increased to %d",byteCode,maxbyteoffset);
 		byteCode = realloc(byteCode, maxbyteoffset);
-		printf(" ... now area at %p\n",byteCode);
+		//printf(" ... now area at %p\n",byteCode);
 		memset(byteCode + byteOffset, 0, maxbyteoffset - byteOffset);
 		
 	}

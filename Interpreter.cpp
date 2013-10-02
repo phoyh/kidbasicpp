@@ -189,7 +189,7 @@ int Interpreter::optype(int op) {
 	else if (op==OP_FLOOR) return OPTYPE_NONE;
 	else if (op==OP_ABS) return OPTYPE_NONE;
 	else if (op==OP_PAUSE) return OPTYPE_NONE;
-	else if (op==OP_POLY) return OPTYPE_NONE;
+	else if (op==OP_POLY) return OPTYPE_INT;
 	else if (op==OP_LENGTH) return OPTYPE_NONE;
 	else if (op==OP_MID) return OPTYPE_NONE;
 	else if (op==OP_INSTR) return OPTYPE_NONE;
@@ -1127,6 +1127,20 @@ Interpreter::compileProgram(char *code)
 	unsigned char currentop;
 	while (op <= byteCode + byteOffset)
 	{
+		/*
+		if (op > byteCode + 77450 && op < byteCode + 77500)
+		{
+			printf("Op at %d, subsequent bytes: ",(int)op-(int)byteCode);
+			unsigned char *i;
+			for (i = op ; i < op + 10 ; i++)
+			{
+				unsigned char byte = *i;
+				printf("%d/",(int)byte);
+			}
+			printf("\n");
+		}
+		*/
+
 		currentop = (unsigned char) *op;
 		op += sizeof(unsigned char);
 		if (currentop == OP_CURRLINE)
