@@ -96,8 +96,6 @@ extern BasicOutput * outwin;
 extern BasicGraph * graphwin;
 extern VariableWin * varwin;
 
-
-
 RunController::RunController()
 {
 	i = new Interpreter();
@@ -522,6 +520,11 @@ void RunController::showOnlineContextDocumentation()
 {
 	QString w = editwin->getCurrentWord();
 	QDesktopServices::openUrl(QUrl("http://doc.basic256.org/doku.php?id=en:" + w));
+}
+
+void RunController::exitOnEndMode()
+{
+	i->exitOnEndMode();
 }
 
 void

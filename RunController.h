@@ -83,6 +83,8 @@ class RunController : public QObject
   void dialogPrompt(QString, QString);
   void dialogFontSelect();
 
+  void exitOnEndMode();
+
  private:
   Interpreter *i;
   bool paused;

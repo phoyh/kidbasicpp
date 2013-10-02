@@ -96,6 +96,7 @@ class Interpreter : public QThread
   bool isStopped();
   bool isAwaitingInput();
   void setInputReady();
+  void exitOnEndMode();
   void cleanup();
   void run();
   bool debugMode;
@@ -134,6 +135,7 @@ class Interpreter : public QThread
   void dialogPrompt(QString, QString);
 
  private:
+  bool isExitOnEndMode;
   int optype(int op);
   QString opname(int);
   QString opxname(int);
