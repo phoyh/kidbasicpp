@@ -31,7 +31,7 @@
 #include "../Version.h"
 
 
-#define SYMTABLESIZE 2000
+#define SYMTABLESIZE 20000
 #define IFTABLESIZE 1000
 
 extern int yylex();
@@ -172,19 +172,34 @@ int newIf(int sourceline, int type) {
 	iftableincludes[numifs] = numincludes;
 	nextifid++;
 	numifs++;
+	if (numifs > IFTABLESIZE)
+	{
+		printf("If-table overflow for source line %d and type %d\n",sourceline,type);
+		nextifid--;
+		return --numifs;
+	}
 	return numifs - 1;
 }
 
 int getSymbol(char *name) {
 	// get a symbol if it exists or create a new one on the symbol table
 	int i;
-	for (i = 0; i < numsyms; i++) {
+	for (i = 0; i < numsyms && i < SYMTABLESIZE; i++) {
+		//if (symtable[i] && !strcmp(name, symtable[i]))
+		//	printf("Found symbol %s in table at %d\n",name,i);
+	
 		if (symtable[i] && !strcmp(name, symtable[i]))
 			return i;
 	}
-	symtable[numsyms] = strdup(name);
-	numsyms++;
-	return numsyms - 1;
+	if (numsyms < SYMTABLESIZE )
+	{
+		symtable[numsyms] = strdup(name);
+		numsyms++;
+		return numsyms - 1;
+	} else {
+		printf("Symbol table overflow for getting symbol: %s\n",name);
+		return 0;
+	}
 }
 
 #define INTERNALSYMBOLEXIT 0 //at the end of the loop - all done
@@ -216,10 +231,30 @@ newByteCode(unsigned int size) {
 
 void
 checkByteMem(unsigned int addedbytes) {
+	/*
+	if (byteOffset > 77445 && byteOffset < 77485)
+	{
+		printf("About to add memory at offset %d, bytes requested: %d\n",byteOffset,addedbytes);
+		printf("Bytes around current position: ");
+		int i;
+		for (i = byteOffset - 20 ; i < byteOffset + 10 ; i++)
+		{
+			unsigned char byte = (unsigned char *) *(i+byteCode);
+			if ( i == byteOffset ) printf("[[");
+			printf("%d/",(int)byte);
+			if ( i == byteOffset ) printf("]] ");
+		}
+		printf("\n");
+	}
+	*/
+	
 	if (byteOffset + addedbytes + 1 >= maxbyteoffset) {
 		maxbyteoffset += maxbyteoffset + addedbytes + 32;
+		//printf("Byte-code memory area (before %p) size increased to %d",byteCode,maxbyteoffset);
 		byteCode = realloc(byteCode, maxbyteoffset);
+		//printf(" ... now area at %p\n",byteCode);
 		memset(byteCode + byteOffset, 0, maxbyteoffset - byteOffset);
+		
 	}
 }
 
@@ -253,7 +288,7 @@ addInt(int data) {
 void
 addString(char *data) {
 	int len = strlen(data) + 1;
-	checkByteMem(len+1);
+	checkByteMem(len);
 	strncpy((char *) byteCode + byteOffset, data, len);
 	byteOffset += len;
 }

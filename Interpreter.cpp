@@ -189,7 +189,7 @@ int Interpreter::optype(int op) {
 	else if (op==OP_FLOOR) return OPTYPE_NONE;
 	else if (op==OP_ABS) return OPTYPE_NONE;
 	else if (op==OP_PAUSE) return OPTYPE_NONE;
-	else if (op==OP_POLY) return OPTYPE_NONE;
+	else if (op==OP_POLY) return OPTYPE_INT;
 	else if (op==OP_LENGTH) return OPTYPE_NONE;
 	else if (op==OP_MID) return OPTYPE_NONE;
 	else if (op==OP_INSTR) return OPTYPE_NONE;
@@ -1014,7 +1014,6 @@ Interpreter::compileProgram(char *code)
 		return -1;
 	}
 
-
 	int result = basicParse(code);
 	if (result < 0)
 	{
@@ -1128,6 +1127,20 @@ Interpreter::compileProgram(char *code)
 	unsigned char currentop;
 	while (op <= byteCode + byteOffset)
 	{
+		/*
+		if (op > byteCode + 77450 && op < byteCode + 77500)
+		{
+			printf("Op at %d, subsequent bytes: ",(int)op-(int)byteCode);
+			unsigned char *i;
+			for (i = op ; i < op + 10 ; i++)
+			{
+				unsigned char byte = *i;
+				printf("%d/",(int)byte);
+			}
+			printf("\n");
+		}
+		*/
+
 		currentop = (unsigned char) *op;
 		op += sizeof(unsigned char);
 		if (currentop == OP_CURRLINE)
@@ -1142,13 +1155,22 @@ Interpreter::compileProgram(char *code)
 			// before execution
 			int *i = (int *) op;
 			op += sizeof(int);
-			if (labeltable[*i] >=0)
+			if (*i >= 0 && labeltable[*i] >=0)
 			{
 				int tbloff = *i;
 				*i = labeltable[tbloff];
 			}
 			else
 			{
+				int byteCodeOffset = op-sizeof(int)-byteCode;
+				if (*i<0)
+				{
+					printf("Byte-code offset %d: Illegal offset to labeltable: %d\n",byteCodeOffset,*i);
+				}
+				else
+				{
+					printf("Byte-code offset %d: Illegal labeltable content at offset %d: %d\n",byteCodeOffset,*i,labeltable[*i]);
+				}
 				printError(ERROR_NOSUCHLABEL,"");
 				return -1;
 			}
