@@ -271,7 +271,7 @@ addInt(int data) {
 void
 addString(char *data) {
 	int len = strlen(data) + 1;
-	checkByteMem(len+1);
+	checkByteMem(len);
 	strncpy((char *) byteCode + byteOffset, data, len);
 	byteOffset += len;
 }
