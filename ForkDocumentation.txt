@@ -1,0 +1,11 @@
+WAVPLAY [ channel , ] Wav-FileName [ , loop-number ]
+%% loop-number has to be given if channel is given
+%% loop-number -1 means infinite loop
+%% loop-number 0 means only one playthrough
+%% defaults: channel = 0 , loop-number = 0
+
+WAVSTOP [(] [ channel ] [)]
+%% defaults: channel = 0
+
+WAVWAIT [(] [ channel ] [)]
+%% defaults: channel = 0

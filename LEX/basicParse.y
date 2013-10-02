@@ -1595,14 +1595,46 @@ printstmt: B256PRINT {
 ;
 
 wavplaystmt: B256WAVPLAY floatexpr ',' stringexpr ',' floatexpr {addOp(OP_WAVPLAY);  }
+	| B256WAVPLAY stringexpr
+	{
+		addIntOp(OP_PUSHINT, 0); // channel
+		addOp(OP_STACKSWAP);
+		addIntOp(OP_PUSHINT, 0); // loopNum
+		addOp(OP_WAVPLAY);  
+	}
+	| B256WAVPLAY floatexpr ',' stringexpr
+	{
+		addIntOp(OP_PUSHINT, 0); // loopNum
+		addOp(OP_WAVPLAY);  
+	}
 ;
 
 wavstopstmt: B256WAVSTOP floatexpr { addOp(OP_WAVSTOP); }
-	| B256WAVSTOP '(' floatexpr ')' { addOp(OP_WAVSTOP); }
+	| B256WAVSTOP '(' floatexpr ')' {addOp(OP_WAVSTOP); }
+	| B256WAVSTOP
+	{
+		addIntOp(OP_PUSHINT, 0); //channel
+		addOp(OP_WAVSTOP);
+	}
+	| B256WAVSTOP '(' ')'
+	{
+		addIntOp(OP_PUSHINT, 0); //channel
+		addOp(OP_WAVSTOP);
+	}
 ;
 
 wavwaitstmt: B256WAVWAIT floatexpr { addExtendedOp(OPX_WAVWAIT); }
 	| B256WAVWAIT '(' floatexpr ')' { addExtendedOp(OPX_WAVWAIT); }
+	| B256WAVWAIT
+	{
+		addIntOp(OP_PUSHINT, 0); //channel
+		addExtendedOp(OPX_WAVWAIT);
+	}
+	| B256WAVWAIT '(' ')'
+	{
+		addIntOp(OP_PUSHINT, 0); //channel
+		addExtendedOp(OPX_WAVWAIT);
+	}
 ;
 
 putslicestmt: B256PUTSLICE floatexpr ',' floatexpr ',' stringexpr  {addOp(OP_PUTSLICE);  }
