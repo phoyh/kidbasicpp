@@ -1,5 +1,3 @@
-make clean
 qmake BASIC256.pro -config release
 make
-./BASIC256 Test.kbs
-
+echo BUILD COMPLETE
