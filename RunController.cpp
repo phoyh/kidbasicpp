@@ -272,14 +272,14 @@ void RunController::playWAV(QString file)
 {
 	mutex->lock();
 	#ifdef USEQSOUND
+		printf("Trying to play sound in qsound %s\n",(char *) file.toUtf8().data());
 		wavsound->play(file);
 	#endif
-	#ifdef USESDL
 		Mix_HaltChannel(SDL_CHAN_WAV);
 		Mix_Chunk *music;
     	music = Mix_LoadWAV((char *) file.toUtf8().data());
+		if (music == NULL) printf("Could not resolve file %s\n",(char *) file.toUtf8().data());
     	Mix_PlayChannel(SDL_CHAN_WAV,music,0);
-	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
@@ -296,14 +296,12 @@ void RunController::waitWAV()
 			usleep(1000);
 		#endif
 	#endif
-	#ifdef USESDL
 		while(Mix_Playing(SDL_CHAN_WAV))
 		#ifdef WIN32
 			Sleep(1);
 		#else
 			usleep(1000);
 		#endif
-	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
@@ -314,9 +312,7 @@ void RunController::stopWAV()
 	#ifdef USEQSOUND
 		wavsound->stop();
 	#endif
-	#ifdef USESDL
 		Mix_HaltChannel(SDL_CHAN_WAV);
-	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
