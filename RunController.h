@@ -36,6 +36,8 @@
 #include "Interpreter.h"
 #include "ReplaceWin.h"
 
+using namespace std;
+
 class RunController : public QObject
 {
   Q_OBJECT
@@ -89,6 +91,7 @@ class RunController : public QObject
   Interpreter *i;
   bool paused;
   int maxChannel;
+  map<string,Mix_Chunk*> soundFilePathToChunk;
   run_status oldStatus;
   QString bytefilename;
 };
