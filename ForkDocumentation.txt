@@ -3,6 +3,7 @@ WAVPLAY [ channel , ] Wav-FileName [ , loop-number ]
 %% loop-number -1 means infinite loop
 %% loop-number 0 means only one playthrough
 %% defaults: channel = 0 , loop-number = 0
+%% Note that files are buffered, subsequent plays do not re-access the file system
 
 WAVSTOP [(] [ channel ] [)]
 %% defaults: channel = 0
