@@ -163,8 +163,10 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Gg][Rr][Aa][Pp][Hh][Ww][Ii][Dd][Tt][Hh]\\b"   				// graphwidth
 		<< "\\b[Hh][Oo][Uu][Rr]\\b"											// hour
 		<< "\\b[Ii][Ff]\\b"													// if
+		<< "\\b[Ii][Mm][Gg][Hh][Ee][Ii][Gg][Hh][Tt]\\b"						// imgheight
 		<< "\\b[Ii][Mm][Gg][Ll][Oo][Aa][Dd]\\b"								// imgload
 		<< "\\b[Ii][Mm][Gg][Ss][Aa][Vv][Ee]\\b"								// imgsave
+		<< "\\b[Ii][Mm][Gg][Ww][Ii][Dd][Tt][Hh]\\b"							// imgwidth
 		<< "\\b[Ii][Mm][Pp][Ll][Oo][Dd][Ee]\\b"								// implode
 		<< "\\b[Ii][Nn][Cc][Ll][Uu][Dd][Ee]\\b"								// include
 		<< "\\b[Ii][Nn][Pp][Uu][Tt]\\b"										// input

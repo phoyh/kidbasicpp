@@ -194,8 +194,10 @@ gray [Gg][Rr][AaEe][Yy]
 green [Gg][Rr][Ee][Ee][Nn]
 hour [Hh][Oo][Uu][Rr]
 if [Ii][Ff]
+imgheight [Ii][Mm][Gg][Hh][Ee][Ii][Gg][Hh][Tt]
 imgload [Ii][Mm][Gg][Ll][Oo][Aa][Dd]
 imgsave [Ii][Mm][Gg][Ss][Aa][Vv][Ee]
+imgwidth [Ii][Mm][Gg][Ww][Ii][Dd][Tt][Hh]
 implode [Ii][Mm][Pp][Ll][Oo][Dd][Ee]
 input [Ii][Nn][Pp][Uu][Tt]
 include [Ii][Nn][Cc][Ll][Uu][Dd][Ee]
@@ -476,8 +478,10 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 {green}		{ count(); return B256GREEN; }
 {hour}		{ count(); return B256HOUR; }
 {if}		{ count(); return B256IF; }
+{imgheight}	{ count(); return B256IMGHEIGHT; }
 {imgload}	{ count(); return B256IMGLOAD; }
 {imgsave}	{ count(); return B256IMGSAVE; }
+{imgwidth}	{ count(); return B256IMGWIDTH; }
 {implode}	{ count(); return B256IMPLODE; }
 {include} 	{ count();
 				BEGIN(INCLUDE);
