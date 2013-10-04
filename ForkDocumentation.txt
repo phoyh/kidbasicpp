@@ -1,8 +1,14 @@
+IMGHEIGHT Image-FileName
+%% returns the height of the image file (0 if not found)
+IMGWIDTH Image-FileName
+%% returns the width of the image file (0 if not found)
+
 WAVPLAY [ channel , ] Wav-FileName [ , loop-number ]
 %% loop-number has to be given if channel is given
 %% loop-number -1 means infinite loop
 %% loop-number 0 means only one playthrough
 %% defaults: channel = 0 , loop-number = 0
+%% Note that files are buffered, subsequent plays do not re-access the file system
 
 WAVSTOP [(] [ channel ] [)]
 %% defaults: channel = 0

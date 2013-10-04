@@ -255,6 +255,8 @@ int Interpreter::optype(int op) {
 	else if (op==OP_PUTSLICE) return OPTYPE_NONE;
 	else if (op==OP_PUTSLICEMASK) return OPTYPE_NONE;
 	else if (op==OP_IMGLOAD) return OPTYPE_NONE;
+	else if (op==OP_IMGWIDTH) return OPTYPE_NONE;
+	else if (op==OP_IMGHEIGHT) return OPTYPE_NONE;
 	else if (op==OP_SQR) return OPTYPE_NONE;
 	else if (op==OP_EXP) return OPTYPE_NONE;
 	else if (op==OP_ARGUMENTCOUNTTEST) return OPTYPE_NONE;
@@ -434,6 +436,8 @@ QString Interpreter::opname(int op) {
 	else if (op==OP_PUTSLICE) return QString("OP_PUTSLICE");
 	else if (op==OP_PUTSLICEMASK) return QString("OP_PUTSLICEMASK");
 	else if (op==OP_IMGLOAD) return QString("OP_IMGLOAD");
+	else if (op==OP_IMGWIDTH) return QString("OP_IMGWITH");
+	else if (op==OP_IMGHEIGHT) return QString("OP_IMGHEIGHT");
 	else if (op==OP_SQR) return QString("OP_SQR");
 	else if (op==OP_EXP) return QString("OP_EXP");
 	else if (op==OP_ARGUMENTCOUNTTEST) return QString("OP_ARGUMENTCOUNTTEST");
@@ -3583,6 +3587,24 @@ Interpreter::execByteCode()
 					if (!fastgraphics) waitForGraphics();
 				}
 			}
+		}
+		break;
+
+	case OP_IMGWIDTH:
+		{
+			op++;
+			QString file = stack.popstring();
+			QImage i(file);
+			stack.pushint(i.width());
+		}
+		break;
+
+	case OP_IMGHEIGHT:
+		{
+			op++;
+			QString file = stack.popstring();
+			QImage i(file);
+			stack.pushint(i.height());
 		}
 		break;
 
