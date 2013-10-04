@@ -102,6 +102,7 @@ RunController::RunController()
 
 	replacewin = NULL;
 	docwin = NULL;
+
 	maxChannel = -1;
 	
 	#ifdef USEQSOUND
@@ -275,9 +276,16 @@ void RunController::playWAV(int channel,QString file,int loopNum)
 		wavsound->play(file);
 	#endif
 		Mix_HaltChannel(channel+SDL_CHAN_WAV);
-		Mix_Chunk *music;
-    	music = Mix_LoadWAV((char *) file.toUtf8().data());
-		if (music == NULL) printf("Could not resolve file %s\n",(char *) file.toUtf8().data());
+		string soundFilePath = string((char *) file.toUtf8().data());
+		Mix_Chunk *music = soundFilePathToChunk[soundFilePath];
+		if (music == NULL) {
+	    	music = Mix_LoadWAV(soundFilePath.c_str());
+			if (music == NULL) {
+				printf("Could not resolve file %s\n",soundFilePath.c_str());
+			} else {
+				soundFilePathToChunk[soundFilePath] = music;
+			}
+		}
 		if (channel > maxChannel) maxChannel = channel;
     	Mix_PlayChannel(channel+SDL_CHAN_WAV,music,loopNum);
 	waitCond->wakeAll();
@@ -430,6 +438,11 @@ RunController::stopRun()
 		int i;
 		for (i = 0 ; i <= maxChannel ; i++) stopWAV(i);
 	}
+	map<string,Mix_Chunk*>::const_iterator soundItr;
+	for (soundItr = soundFilePathToChunk.begin() ; soundItr != soundFilePathToChunk.end(); ++soundItr) {
+		Mix_FreeChunk((*soundItr).second);
+	}
+	soundFilePathToChunk.clear();
 
 	mutex->lock();
 	outwin->setReadOnly(true);
