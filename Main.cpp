@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
 {
 	QApplication qapp(argc, argv);
 	char *lang = NULL;		// locale code passed with argument -l on command line
+	char *prgArgs = NULL;		// arguments of the program to be loaded passed with -a on command line
 	bool loadandgo = false;		// if -r option then run code in loadandgo mode
-	bool exitonend = false;     // if -e option then exit kidbasic on the end statement
 	bool ok;
 	QString localecode;		// either lang or the system localle - stored on mainwin for help display
 
@@ -58,19 +58,19 @@ int main(int argc, char *argv[])
 
 		while (true)
 		{
-			int opt = getopt(argc, argv, "rel:");
+			int opt = getopt(argc, argv, "ra:l:");
 			if (opt == -1) break;
 
 			switch ((char) opt)
 			{
+				case 'a':
+					prgArgs = optarg;
+					break;
 				case 'l':
 					lang = optarg;
 					break;
 				case 'r':
 					loadandgo = true;
-					break;
-				case 'e':
-					exitonend = true;
 					break;
 				default:
 					break;
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
 
 	setlocale(LC_ALL,"C");
 
-	if (exitonend) mainwin->exitOnEndMode();
+	mainwin->setPrgArgs(prgArgs);
 	if (loadandgo) mainwin->loadAndGoMode();
 
 	int returnval = qapp.exec();

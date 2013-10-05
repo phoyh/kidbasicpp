@@ -55,7 +55,7 @@ public:
 	~MainWindow();
 	void closeEvent(QCloseEvent *);
 	void loadAndGoMode();
-	void exitOnEndMode();
+	void setPrgArgs(char*);
 	QAction * runact;
 	QAction * debugact;
 	QAction * stepact;

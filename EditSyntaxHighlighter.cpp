@@ -73,11 +73,13 @@ void EditSyntaxHighlighter::initKeywords()
   QStringList keywordPatterns;
 
   keywordPatterns
+  	  	<< "\\b[Aa][Bb][Oo][Rr][Tt]\\b"										// abort
 		<< "\\b[Aa][Bb][Ss]\\b"												// abs
 		<< "\\b[Aa][Cc][Oo][Ss]\\b"											// acos
 		<< "\\b[Aa][Ll][Ee][Rr][Tt]\\b"										// alert
 		<< "\\b[Aa][Nn][Dd]\\b"												// and
 		<< "\\b[Aa][Rr][Cc]\\b"												// arc
+		<< "\\b[Aa][Rr][Gg][Ss]\\b"											// args
 		<< "\\b[Aa][Ss][Cc]\\b"												// asc
 		<< "\\b[Aa][Ss][Ii][Nn]\\b"											// asin
 		<< "\\b[Aa][Tt][Aa][Nn]\\b"											// atan

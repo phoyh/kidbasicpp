@@ -380,7 +380,7 @@ RunController::startRun()
 
 
 void
-RunController::inputEntered(QString text)
+RunController::inputEntered(QString)
 {
 	graphwin->setFocus();
 	mutex->lock();
@@ -540,9 +540,9 @@ void RunController::showOnlineContextDocumentation()
 	QDesktopServices::openUrl(QUrl("http://doc.basic256.org/doku.php?id=en:" + w));
 }
 
-void RunController::exitOnEndMode()
+void RunController::setPrgArgs(char *prgArgs)
 {
-	i->exitOnEndMode();
+	i->setPrgArgs(prgArgs);
 }
 
 void

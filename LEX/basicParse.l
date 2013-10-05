@@ -96,11 +96,13 @@ stringvar [a-zA-Z][a-zA-Z0-9_]*\$
 variable [a-zA-Z][a-zA-Z0-9_]*
 whitespace [ \t]+
 
+abort [Aa][Bb][Oo][Rr][Tt]
 abs [Aa][Bb][Ss]
 acos [Aa][Cc][Oo][Ss]
 alert [Aa][Ll][Ee][Rr][Tt]
 and [Aa][Nn][Dd]
 arc [Aa][Rr][Cc]
+args [Aa][Rr][Gg][Ss]
 asc [Aa][Ss][Cc]
 asin [Aa][Ss][Ii][Nn]
 atan [Aa][Tt][Aa][Nn]
@@ -373,11 +375,13 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 	yylval.string[len - 2] = 0;
 	return B256STRING;
 }
+{abort}		{ count(); return B256ABORT; }
 {abs}		{ count(); return B256ABS; }
 {acos}		{ count(); return B256ACOS; }
 {alert}		{ count(); return B256ALERT; }
 {and}		{ count(); return B256AND; }
 {arc}		{ count(); return B256ARC; }
+{args}		{ count(); return B256ARGS; }
 {asc}		{ count(); return B256ASC; }
 {asin}		{ count(); return B256ASIN; }
 {atan}		{ count(); return B256ATAN; }

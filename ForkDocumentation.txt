@@ -1,3 +1,9 @@
+ABORT
+%% aborts BASIC256 immediately
+
+ARGS
+%% returns the arguments that were passed to BASIC256 from the command line with option -a
+
 IMGHEIGHT Image-FileName
 %% returns the height of the image file (0 if not found)
 IMGWIDTH Image-FileName
