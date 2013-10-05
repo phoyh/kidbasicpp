@@ -94,6 +94,7 @@ unix:!macx {
 	#DEFINES				+=	SOUND_DSP
 
 	# Sound - Option 1 - SDL Mixer
+	DEFINES					+=	USESDL
 	DEFINES					+=	SOUND_SDL
 	LIBS					+=	-lSDL
 	LIBS					+=	-lSDL_mixer

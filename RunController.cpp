@@ -275,6 +275,7 @@ void RunController::playWAV(int channel,QString file,int loopNum)
 		printf("Trying to play sound in qsound %s\n",(char *) file.toUtf8().data());
 		wavsound->play(file);
 	#endif
+	#ifdef USESDL
 		Mix_HaltChannel(channel+SDL_CHAN_WAV);
 		string soundFilePath = string((char *) file.toUtf8().data());
 		Mix_Chunk *music = soundFilePathToChunk[soundFilePath];
@@ -288,6 +289,7 @@ void RunController::playWAV(int channel,QString file,int loopNum)
 		}
 		if (channel > maxChannel) maxChannel = channel;
     	Mix_PlayChannel(channel+SDL_CHAN_WAV,music,loopNum);
+	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
@@ -304,12 +306,14 @@ void RunController::waitWAV(int channel)
 			usleep(1000);
 		#endif
 	#endif
+	#ifdef USESDL
 		while(Mix_Playing(channel+SDL_CHAN_WAV))
 		#ifdef WIN32
 			Sleep(1);
 		#else
 			usleep(1000);
 		#endif
+	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
@@ -320,7 +324,9 @@ void RunController::stopWAV(int channel)
 	#ifdef USEQSOUND
 		wavsound->stop();
 	#endif
+	#ifdef USESDL
 		Mix_HaltChannel(channel+SDL_CHAN_WAV);
+	#endif
 	waitCond->wakeAll();
 	mutex->unlock();
 }
