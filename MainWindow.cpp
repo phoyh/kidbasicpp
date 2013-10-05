@@ -471,9 +471,9 @@ void MainWindow::updateRecent()
 	}
 }
 
-void MainWindow::exitOnEndMode()
+void MainWindow::setPrgArgs(char *prgArgs)
 {
-	rc->exitOnEndMode();
+	rc->setPrgArgs(prgArgs);
 }
 
 void MainWindow::loadAndGoMode()

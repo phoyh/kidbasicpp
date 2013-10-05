@@ -85,7 +85,7 @@ class RunController : public QObject
   void dialogPrompt(QString, QString);
   void dialogFontSelect();
 
-  void exitOnEndMode();
+  void setPrgArgs(char*);
 
  private:
   Interpreter *i;

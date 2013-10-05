@@ -101,7 +101,7 @@ extern "C" {
 
 Interpreter::Interpreter()
 {
-   isExitOnEndMode = false;
+	prgArgsString = QString("");
 	fastgraphics = false;
 	directorypointer=NULL;
 	status = R_STOPPED;
@@ -591,6 +591,8 @@ QString Interpreter::opxname(int op) {
 	else if (op==OPX_FROMRADIX) return QString("OPX_FROMRADIX");
 	else if (op==OPX_TORADIX) return QString("OPX_TORADIX");
 	else if (op==OPX_DEBUGINFO) return QString("OPX_DEBUGINFO");
+	else if (op==OPX_ABORT) return QString("OPX_ABORT");
+	else if (op==OPX_ARGS) return QString("OPX_ARGS");
 	else return QString("OPX_UNKNOWN");
 }
 
@@ -1359,9 +1361,9 @@ Interpreter::runHalted()
 	status = R_STOPPED;
 }
 
-void Interpreter::exitOnEndMode()
+void Interpreter::setPrgArgs(char* prgArgs)
 {
-	isExitOnEndMode = true;
+	prgArgsString = QString( prgArgs );
 }
 
 void
@@ -1468,12 +1470,7 @@ Interpreter::execByteCode()
 
 	case OP_END:
 		{
-			if (isExitOnEndMode) {
-				printf("End statement reached - exit as requested\n");
-				abort();
-			} else {
-				return -1;
-			}
+			return -1;
 		}
 		break;
 
@@ -5336,6 +5333,15 @@ Interpreter::execByteCode()
 				}
 				break;
 
+			case OPX_ABORT:
+				abort();
+
+			case OPX_ARGS:
+				{
+					op++;
+					stack.pushstring(prgArgsString);
+				}
+				break;
 
 
 
