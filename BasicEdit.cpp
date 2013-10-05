@@ -130,7 +130,7 @@ BasicEdit::newProgram()
 	if (donew)
 	{
 		clear();
-		emit(changeWindowTitle(tr("Untitled - BASIC-256")));
+		emit(changeWindowTitle(tr("Untitled - KidBasic++")));
 		filename = "";
 		codeChanged = false;
 	}
@@ -167,7 +167,7 @@ BasicEdit::saveProgram()
 			f.write(this->document()->toPlainText().toUtf8());
 			f.close();
 			QFileInfo fi(f);
-			emit(changeWindowTitle(fi.fileName() + tr(" - BASIC-256")));
+			emit(changeWindowTitle(fi.fileName() + tr(" - KidBasic++")));
 			QDir::setCurrent(fi.absolutePath());
 			codeChanged = false;
 			addFileToRecentList(filename);
@@ -262,7 +262,7 @@ BasicEdit::loadFile(QString s)
 			f.close();
 			filename = s;
 			QFileInfo fi(f);
-			emit(changeWindowTitle(fi.fileName() + tr(" - BASIC-256")));
+			emit(changeWindowTitle(fi.fileName() + tr(" - KidBasic++")));
 			QDir::setCurrent(fi.absolutePath());
 			codeChanged = false;
 			addFileToRecentList(s);

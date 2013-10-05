@@ -362,7 +362,7 @@ MainWindow::MainWindow(QWidget * parent, Qt::WindowFlags f)
 		QObject::connect(onlinehact, SIGNAL(triggered()), rc, SLOT(showOnlineDocumentation()));
 	#endif
 		helpmenu->addSeparator();
-	QAction *aboutact = helpmenu->addAction(QObject::tr("&About BASIC-256"));
+	QAction *aboutact = helpmenu->addAction(QObject::tr("&About KidBasic++"));
 	QObject::connect(aboutact, SIGNAL(triggered()), this, SLOT(about()));
 
 	// Add actions to main window toolbar
@@ -434,8 +434,8 @@ void MainWindow::about()
 		#define PORTABLE ""
 	#endif
 		
-	QMessageBox::about(this, QObject::tr("About BASIC-256") +  PORTABLE,
-		QObject::tr("<h2>BASIC-256") + PORTABLE + QObject::tr("</h2>") +
+	QMessageBox::about(this, QObject::tr("About KidBasic++") +  PORTABLE,
+		QObject::tr("<h2>KidBasic++") + PORTABLE + QObject::tr("</h2>") +
 		QObject::tr("version <b>") +  VERSION + QObject::tr("</b> - built with QT <b>") + QT_VERSION_STR +QObject::tr("</b>") +
 		QObject::tr("<p>Copyright &copy; 2006-2010, The BASIC-256 Team</p>") + 
 		QObject::tr("<p>Please visit our web site at <a href=http://www.basic256.org>basic256.org</a> for tutorials and documentation.</p>") +

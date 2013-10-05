@@ -19,6 +19,6 @@
 #ifndef __VERSION
 #define __VERSION
 
-#define VERSION "0.9.9.69 (2013-09-18)"
+#define VERSION "v2.5.2"
 #define VERSIONSIGNATURE 90969
 #endif

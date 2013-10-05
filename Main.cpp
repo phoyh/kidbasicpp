@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	mainwin = new MainWindow();
 
 	mainwin->setObjectName( "mainwin" );
-	mainwin->setWindowTitle(QObject::tr("Untitled - BASIC-256"));
+	mainwin->setWindowTitle(QObject::tr("KidBasic++"));
 	mainwin->statusBar()->showMessage(QObject::tr("Ready."));
 	mainwin->localecode = localecode;
 	mainwin->show();
