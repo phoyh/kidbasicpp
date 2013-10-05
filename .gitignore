@@ -7,3 +7,4 @@ LEX/basicParse.tab.c
 LEX/basicParse.tab.h
 LEX/lex.yy.c
 BASIC256
+Makefile*
