@@ -111,6 +111,7 @@ blue [Bb][Ll][Uu][Ee]
 booleof [Ee][Oo][Ff]
 boolfalse [Ff][Aa][Ll][Ss][Ee]
 booltrue [Tt][Rr][Uu][Ee]
+breakpoint [Bb][Rr][Ee][Aa][Kk][Pp][Oo][Ii][Nn][Tt]
 call [Cc][Aa][Ll][Ll]
 ceil [Cc][Ee][Ii][Ll]
 changedir [Cc][Hh][Aa][Nn][Gg][Ee][Dd][Ii][Rr]
@@ -390,6 +391,7 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 {booleof}	{ count(); return B256BOOLEOF; }
 {boolfalse}	{ count(); return B256BOOLFALSE; }
 {booltrue}	{ count(); return B256BOOLTRUE; }
+{breakpoint}	{ count(); return B256BREAKPOINT; }
 {call}		{ count(); return B256CALL; }
 {ceil}		{ count(); return B256CEIL; }
 {changedir}	{ count(); return B256CHANGEDIR; }
