@@ -7,7 +7,7 @@ if [ $# != 1 ]
 fi
 git checkout release
 git merge develop --no-commit
-if [ $? == 1]
+if [ $? == 1 ]
 	then
 		echo "Merge conflicts to be solved."
 		exit -1
