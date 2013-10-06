@@ -10,6 +10,6 @@ git merge develop --no-commit
 rm Version.h~
 mv Version.h Version.h~
 sed s/"#define VERSION \"[^\"]*\""/"#define VERSION \"$1\""/ <Version.h~ >Version.h
-git commit -a -m "Added release version information $1"
+git commit -a -m "Merged from develop for release $1"
 git tag -a $1
 git checkout develop
