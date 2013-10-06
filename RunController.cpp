@@ -37,9 +37,6 @@
 	#include <QApplication>
 #endif
 
-
-using namespace std;
-
 #include "RunController.h"
 #include "MainWindow.h"
 #include "DocumentationWin.h"
@@ -351,10 +348,16 @@ RunController::startDebug()
 		i->start();
 		varwin->clear();
 		mainwin->runact->setEnabled(false);
-		mainwin->debugact->setEnabled(false);
+		mainwin->debugact->setEnabled(true);
 		mainwin->stepact->setEnabled(true);
 		mainwin->stopact->setEnabled(true);
 		emit(debugStarted());
+	}
+	else {
+		debugmutex->lock();
+		i->setDebugRun();
+		waitDebugCond->wakeAll();
+		debugmutex->unlock();
 	}
 }
 

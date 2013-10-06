@@ -389,7 +389,7 @@ addStringOp(char op, char *data) {
 %token B256FROMBINARY B256FROMHEX B256FROMOCTAL B256FROMRADIX B256TOBINARY B256TOHEX B256TOOCTAL B256TORADIX
 %token B256DEBUGINFO
 %token B256CONTINUEDO B256CONTINUEFOR B256CONTINUEWHILE B256EXITDO B256EXITFOR B256EXITWHILE
-%token B256ARGS B256ABORT
+%token B256ARGS B256ABORT B256BREAKPOINT
 
 %union
 {
@@ -885,6 +885,7 @@ statement: gotostmt
 	| exitforstmt
 	| exitwhilestmt
 	| abortstmt
+	| breakpointstmt
 ;
 
 dimstmt: B256DIM B256VARIABLE floatexpr {
@@ -2016,6 +2017,8 @@ exitwhilestmt: B256EXITWHILE {
 }
 
 abortstmt: B256ABORT { addExtendedOp(OPX_ABORT); }
+
+breakpointstmt: B256BREAKPOINT { addExtendedOp(OPX_BREAKPOINT); }
 
 
 /* ####################################

@@ -83,6 +83,7 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Aa][Ss][Cc]\\b"												// asc
 		<< "\\b[Aa][Ss][Ii][Nn]\\b"											// asin
 		<< "\\b[Aa][Tt][Aa][Nn]\\b"											// atan
+		<< "\\b[Bb][Rr][Ee][Aa][Kk][Pp][Oo][Ii][Nn][Tt]\\b"				// breakpoint
 		<< "\\b[Cc][Aa][Ll][Ll]\\b"											// call
 		<< "\\b[Cc][Ee][Ii][Ll]\\b"											// ceil
 		<< "\\b[Cc][Hh][Aa][Nn][Gg][Ee][Dd][Ii][Rr]\\b"						// changedir

@@ -66,8 +66,6 @@
 	#include <QMessageBox>
 #endif
 
-using namespace std;
-
 #include "LEX/basicParse.tab.h"
 #include "ByteCodes.h"
 #include "CompileErrors.h"
@@ -593,6 +591,7 @@ QString Interpreter::opxname(int op) {
 	else if (op==OPX_DEBUGINFO) return QString("OPX_DEBUGINFO");
 	else if (op==OPX_ABORT) return QString("OPX_ABORT");
 	else if (op==OPX_ARGS) return QString("OPX_ARGS");
+	else if (op==OPX_BREAKPOINT) return QString("OPX_BREAKPOINT");
 	else return QString("OPX_UNKNOWN");
 }
 
@@ -1249,6 +1248,7 @@ Interpreter::initialize()
 	drawingpen = QPen(Qt::black);
 	drawingbrush = QBrush(Qt::black, Qt::SolidPattern);
 	status = R_RUNNING;
+	isDebugRunning = false;
 	once = true;
 	currentLine = 1;
 	currentIncludeFile = QString("");
@@ -1366,6 +1366,11 @@ void Interpreter::setPrgArgs(char* prgArgs)
 	prgArgsString = QString( prgArgs );
 }
 
+void Interpreter::setDebugRun()
+{
+	isDebugRunning = true;
+}
+
 void
 Interpreter::run()
 {
@@ -1451,7 +1456,7 @@ Interpreter::execByteCode()
 		int *i = (int *) op;
 		currentLine = *i;
 		op += sizeof(int);
-		if (debugMode && *op != OP_CURRLINE)
+		if (debugMode && !isDebugRunning && *op != OP_CURRLINE)
 		{
 			emit(highlightLine(currentLine));
 			debugmutex->lock();
@@ -5343,7 +5348,18 @@ Interpreter::execByteCode()
 				}
 				break;
 
-
+			case OPX_BREAKPOINT:
+				{
+					op++;
+					if (debugMode) {
+						isDebugRunning = false;
+						emit(highlightLine(currentLine));
+						debugmutex->lock();
+						waitDebugCond->wait(debugmutex);
+						debugmutex->unlock();
+					}
+				}
+				break;
 
 
 

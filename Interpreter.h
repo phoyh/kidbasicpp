@@ -99,6 +99,7 @@ class Interpreter : public QThread
   void setPrgArgs(char*);
   void cleanup();
   void run();
+  void setDebugRun();
   bool debugMode;
   QString returnString;		// return value from runcontroller emit
   int returnInt;			// return value from runcontroller emit
@@ -136,6 +137,7 @@ class Interpreter : public QThread
 
  private:
   QString prgArgsString;
+  bool isDebugRunning;
   int optype(int op);
   QString opname(int);
   QString opxname(int);
