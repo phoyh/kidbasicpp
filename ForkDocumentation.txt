@@ -4,6 +4,9 @@ ABORT
 ARGS
 %% returns the arguments that were passed to BASIC256 from the command line with option -a
 
+BREAKPOINT
+%% forces the debugger to stop at this statement, user can choose debug/step afterwards
+
 IMGHEIGHT Image-FileName
 %% returns the height of the image file (0 if not found)
 IMGWIDTH Image-FileName
