@@ -5353,10 +5353,6 @@ Interpreter::execByteCode()
 					op++;
 					if (debugMode) {
 						isDebugRunning = false;
-						emit(highlightLine(currentLine));
-						debugmutex->lock();
-						waitDebugCond->wait(debugmutex);
-						debugmutex->unlock();
 					}
 				}
 				break;
