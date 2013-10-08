@@ -564,6 +564,7 @@ QString Interpreter::opxname(int op) {
 	else if (op==OPX_EDITVISIBLE) return QString("OPX_EDITVISIBLE");
 	else if (op==OPX_GRAPHVISIBLE) return QString("OPX_GRAPHVISIBLE");
 	else if (op==OPX_OUTPUTVISIBLE) return QString("OPX_OUTPUTVISIBLE");
+	else if (op==OPX_FONTASCENT) return QString("OPX_FONTASCENT");
 	else if (op==OPX_TEXTWIDTH) return QString("OPX_TEXTWIDTH");
 	else if (op==OPX_SPRITER) return QString("OPX_SPRITER");
 	else if (op==OPX_SPRITES) return QString("OPX_SPRITES");
@@ -5004,6 +5005,21 @@ Interpreter::execByteCode()
 					if (opcode==OPX_EDITVISIBLE) emit(mainWindowsVisible(0,show!=0));
 					if (opcode==OPX_GRAPHVISIBLE) emit(mainWindowsVisible(1,show!=0));
 					if (opcode==OPX_OUTPUTVISIBLE) emit(mainWindowsVisible(2,show!=0));
+				}
+				break;
+
+			case OPX_FONTASCENT:
+				{
+					// return the number of pixels the test string will require for diaplay
+					op++;
+					int w = 0;
+					QPainter ian(graphwin->image);
+					if(!fontfamily.isEmpty()) {
+						ian.setFont(QFont(fontfamily, fontpoint, fontweight));
+					}
+					w = QFontMetrics(ian.font()).ascent();
+					ian.end();
+					stack.pushint((int) (w));
 				}
 				break;
 

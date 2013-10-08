@@ -171,6 +171,7 @@ explodex [Ee][Xx][Pp][Ll][Oo][Dd][Ee][Xx]
 fastgraphics [Ff][Aa][Ss][Tt][Gg][Rr][Aa][Pp][Hh][Ii][Cc][Ss]
 floor [Ff][Ll][Oo][Oo][Rr]
 font [Ff][Oo][Nn][Tt]
+fontascent [Ff][Oo][Nn][Tt][Aa][Ss][Cc][Ee][Nn][Tt]
 for [Ff][Oo][Rr]
 freedb [Ff][Rr][Ee][Ee][Dd][Bb]
 freedbset [Ff][Rr][Ee][Ee][Dd][Bb][Ss][Ee][Tt]
@@ -594,6 +595,7 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 {system}	{ count(); return B256SYSTEM; }
 {tan}		{ count(); return B256TAN; }
 {text}		{ count(); return B256TEXT; }
+{fontascent}		{ count(); return B256FONTASCENT; }
 {textwidth}		{ count(); return B256TEXTWIDTH; }
 {then}		{ count(); return B256THEN; }
 {throwerror}	{ count(); return B256THROWERROR; }
