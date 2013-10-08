@@ -142,6 +142,7 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Ff][Ll][Oo][Aa][Tt]\\b"										// float
 		<< "\\b[Ff][Ll][Oo][Oo][Rr]\\b"										// floor
 		<< "\\b[Ff][Oo][Nn][Tt]\\b"											// font
+		<< "\\b[Ff][Oo][Nn][Tt][Aa][Ss][Cc][Ee][Nn][Tt]\\b"				// fontascent
 		<< "\\b[Ff][Oo][Rr]\\b"												// for
 		<< "\\b[Ff][Rr][Ee][Ee][Dd][Bb]\\b"									// freedb
 		<< "\\b[Ff][Rr][Ee][Ee][Dd][Bb][Ss][Ee][Tt]\\b"						// freedbset
@@ -268,6 +269,7 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Ss][Yy][Ss][Tt][Ee][Mm]\\b"									// system
 		<< "\\b[Tt][Aa][Nn]\\b"												// tan
 		<< "\\b[Tt][Ee][Xx][Tt]\\b"											// text
+		<< "\\b[Tt][Ee][Xx][Tt][Ww][Ii][Dd][Tt][Hh]\\b"					// textwidth
 		<< "\\b[Tt][Hh][Ee][Nn]\\b"											// then
 		<< "\\b[Tt][Hh][Rr][Oo][Ww][Ee][Rr][Rr][Oo][Rr]\\b"					// throwerror
 		<< "\\b[Tt][Oo]\\b"													// to
