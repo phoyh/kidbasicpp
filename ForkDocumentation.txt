@@ -9,6 +9,8 @@ BREAKPOINT
 
 FONTASCENT
 %% returns the ascent of the the current font
+FONTDESCENT
+%% returns the descent of the the current font
 
 IMGHEIGHT Image-FileName
 %% returns the height of the image file (0 if not found)
