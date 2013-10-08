@@ -143,6 +143,7 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Ff][Ll][Oo][Oo][Rr]\\b"										// floor
 		<< "\\b[Ff][Oo][Nn][Tt]\\b"											// font
 		<< "\\b[Ff][Oo][Nn][Tt][Aa][Ss][Cc][Ee][Nn][Tt]\\b"				// fontascent
+		<< "\\b[Ff][Oo][Nn][Tt][Dd][Ee][Ss][Cc][Ee][Nn][Tt]\\b"		// fontdescent
 		<< "\\b[Ff][Oo][Rr]\\b"												// for
 		<< "\\b[Ff][Rr][Ee][Ee][Dd][Bb]\\b"									// freedb
 		<< "\\b[Ff][Rr][Ee][Ee][Dd][Bb][Ss][Ee][Tt]\\b"						// freedbset
