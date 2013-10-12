@@ -137,6 +137,8 @@ class Interpreter : public QThread
 
  private:
   QString prgArgsString;
+  std::map<QString,QImage> imageBuffer;
+  QImage getImage(QString);
   bool isDebugRunning;
   int optype(int op);
   QString opname(int);

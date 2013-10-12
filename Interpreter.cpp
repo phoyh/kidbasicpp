@@ -1246,6 +1246,7 @@ Interpreter::initialize()
 	op = byteCode;
 	callstack = NULL;
 	forstack = NULL;
+	imageBuffer = std::map<QString,QImage>();
 	fastgraphics = false;
 	drawingpen = QPen(Qt::black);
 	drawingbrush = QBrush(Qt::black, Qt::SolidPattern);
@@ -1287,7 +1288,7 @@ void
 Interpreter::cleanup()
 {
 	// called by run() once the run is terminated
-	//
+	imageBuffer.clear();
 	// Clean up stack
 	stack.clear();
 	// Clean up variables
@@ -1398,6 +1399,20 @@ Interpreter::inputEntered(QString text)
 	}
 }
 
+QImage
+Interpreter::getImage(QString fileName)
+{
+	QImage i;
+	std::map<QString,QImage>::iterator bufferIterator = imageBuffer.find(fileName);
+	if (bufferIterator != imageBuffer.end())
+	{
+		i = bufferIterator->second;
+	} else {
+		i = QImage(fileName);
+		imageBuffer[fileName] = i;
+	}
+	return i;
+}
 
 void
 Interpreter::waitForGraphics()
@@ -3575,7 +3590,7 @@ Interpreter::execByteCode()
 			if (scale<0) {
 				errornum = ERROR_IMAGESCALE;
 			} else {
-				QImage i(file);
+				QImage i = getImage(file);
 				if(i.isNull()) {
 					errornum = ERROR_IMAGEFILE;
 				} else {
@@ -3598,8 +3613,13 @@ Interpreter::execByteCode()
 		{
 			op++;
 			QString file = stack.popstring();
-			QImage i(file);
-			stack.pushint(i.width());
+			QImage i = getImage(file);
+			if(i.isNull()) {
+				errornum = ERROR_IMAGEFILE;
+				stack.pushint(0);
+			} else {
+				stack.pushint(getImage(file).width());
+			}
 		}
 		break;
 
@@ -3607,8 +3627,13 @@ Interpreter::execByteCode()
 		{
 			op++;
 			QString file = stack.popstring();
-			QImage i(file);
-			stack.pushint(i.height());
+			QImage i = getImage(file);
+			if(i.isNull()) {
+				errornum = ERROR_IMAGEFILE;
+				stack.pushint(0);
+			} else {
+				stack.pushint(getImage(file).height());
+			}
 		}
 		break;
 
