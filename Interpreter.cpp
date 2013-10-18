@@ -1452,6 +1452,9 @@ Interpreter::execByteCode()
 		lasterrorline = currentLine;
 		errornum = ERROR_NONE;
 		errormessage = "";
+		emit(mainWindowsVisible(0,true));
+		emit(mainWindowsVisible(1,false));
+		emit(mainWindowsVisible(2,true));
 		if(onerroraddress!=0 && lasterrornum > 0) {
 			// progess call to subroutine for error handling
 			frame *temp = new frame;
