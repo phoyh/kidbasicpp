@@ -101,6 +101,7 @@ Interpreter::Interpreter()
 {
 	prgArgsString = QString("");
 	fastgraphics = false;
+	graphWinPainter=NULL;
 	directorypointer=NULL;
 	status = R_STOPPED;
 	for (int t=0;t<NUMSOCKETS;t++) netsockfd[t]=-1;
