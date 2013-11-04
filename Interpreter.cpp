@@ -101,6 +101,7 @@ Interpreter::Interpreter()
 {
 	prgArgsString = QString("");
 	fastgraphics = false;
+	graphWinPainter=NULL;
 	directorypointer=NULL;
 	status = R_STOPPED;
 	for (int t=0;t<NUMSOCKETS;t++) netsockfd[t]=-1;
@@ -594,6 +595,9 @@ QString Interpreter::opxname(int op) {
 	else if (op==OPX_ABORT) return QString("OPX_ABORT");
 	else if (op==OPX_ARGS) return QString("OPX_ARGS");
 	else if (op==OPX_BREAKPOINT) return QString("OPX_BREAKPOINT");
+	else if (op==OPX_CLIPPINGRECT) return QString("OPX_CLIPPINGRECT");
+	else if (op==OPX_CLIPPINGRESET) return QString("OPX_CLIPPINGRESET");
+	else if (op==OPX_RECTIMG) return QString("OPX_RECTIMG");
 	else return QString("OPX_UNKNOWN");
 }
 
@@ -938,17 +942,17 @@ void Interpreter::clearsprites() {
 void Interpreter::spriteundraw(int n) {
 	// undraw all visible sprites >= n
 	int x, y, i;
-	QPainter ian(graphwin->image);
+	QPainter* ian = getGraphWinPainter();
 	i = nsprites-1;
 	while(i>=n) {
 		if (sprites[i].underimage && sprites[i].visible) {
 			x = sprites[i].x - (sprites[i].underimage->width()/2);
 			y = sprites[i].y - (sprites[i].underimage->height()/2);
-			ian.drawImage(x, y, *(sprites[i].underimage));
+			ian->drawImage(x, y, *(sprites[i].underimage));
 		}
 		i--;
 	}
-	ian.end();
+	ian->end();
 }
 
 void Interpreter::spriteredraw(int n) {
@@ -957,7 +961,7 @@ void Interpreter::spriteredraw(int n) {
 	i = n;
 	while(i<nsprites) {
 		if (sprites[i].image && sprites[i].visible) {
-			QPainter ian(graphwin->image);
+			QPainter* ian = getGraphWinPainter();
 			if (sprites[i].r==0 && sprites[i].s==1) {
 				if (sprites[i].underimage) {
 					delete sprites[i].underimage;
@@ -967,7 +971,7 @@ void Interpreter::spriteredraw(int n) {
 					x = sprites[i].x - (sprites[i].image->width()/2);
 					y = sprites[i].y - (sprites[i].image->height()/2);
 					sprites[i].underimage = new QImage(graphwin->image->copy(x, y, sprites[i].image->width(), sprites[i].image->height()));
-					ian.drawImage(x, y, *(sprites[i].image));
+					ian->drawImage(x, y, *(sprites[i].image));
 				}
 			} else {
 				QTransform transform = QTransform().translate(0,0).rotateRadians(sprites[i].r).scale(sprites[i].s,sprites[i].s);;
@@ -980,10 +984,10 @@ void Interpreter::spriteredraw(int n) {
 					x = sprites[i].x - (rotated.width()/2);
 					y = sprites[i].y - (rotated.height()/2);
 					sprites[i].underimage = new QImage(graphwin->image->copy(x, y, rotated.width(), rotated.height()));
-					ian.drawImage(x, y, rotated);
+					ian->drawImage(x, y, rotated);
 				}
 			}
-			ian.end();
+			ian->end();
 		}
 		i++;
 	}
@@ -1252,6 +1256,7 @@ Interpreter::initialize()
 	drawingbrush = QBrush(Qt::black, Qt::SolidPattern);
 	status = R_RUNNING;
 	isDebugRunning = false;
+	isClippingActive = false;
 	once = true;
 	currentLine = 1;
 	currentIncludeFile = QString("");
@@ -1412,6 +1417,17 @@ Interpreter::getImage(QString fileName)
 		imageBuffer[fileName] = i;
 	}
 	return i;
+}
+
+QPainter*
+Interpreter::getGraphWinPainter()
+{
+	if (graphWinPainter != NULL ) {
+		delete graphWinPainter;
+	}
+	graphWinPainter = new QPainter(graphwin->image);
+	if (isClippingActive) graphWinPainter->setClipRect(clippingX,clippingY,clippingWidth,clippingHeight);
+	return graphWinPainter;
 }
 
 void
@@ -3269,22 +3285,22 @@ Interpreter::execByteCode()
 				offset+=4;
 				if (ok) {
 
-					QPainter ian(graphwin->image);
-					ian.setPen(lastrgb);
+					QPainter* ian = getGraphWinPainter();
+					ian->setPen(lastrgb);
 					for(th=0; th<h && ok; th++) {
 						for(tw=0; tw<w && ok; tw++) {
 							rgb = imagedata.mid(offset, 8).toUInt(&ok, 16);
 							offset+=8;
 							if (ok && rgb != mask) {
 								if (rgb!=lastrgb) {
-									ian.setPen(rgb);
+									ian->setPen(rgb);
 									lastrgb = rgb;
 								}
-								ian.drawPoint(x + tw, y + th);
+								ian->drawPoint(x + tw, y + th);
 							}
 						}
 					}
-					ian.end();
+					ian->end();
 					if (!fastgraphics) waitForGraphics();
 				}
 			}
@@ -3303,17 +3319,17 @@ Interpreter::execByteCode()
 			int y0val = stack.popint();
 			int x0val = stack.popint();
 
-			QPainter ian(graphwin->image);
-			ian.setPen(drawingpen);
-			ian.setBrush(drawingbrush);
+			QPainter* ian = getGraphWinPainter();
+			ian->setPen(drawingpen);
+			ian->setBrush(drawingbrush);
 			if (drawingpen.color()==QColor(0,0,0,0) && drawingbrush.color()==QColor(0,0,0,0) ) {
-				ian.setCompositionMode(QPainter::CompositionMode_Clear);
+				ian->setCompositionMode(QPainter::CompositionMode_Clear);
 			}
 			if (x1val >= 0 && y1val >= 0)
 			{
-				ian.drawLine(x0val, y0val, x1val, y1val);
+				ian->drawLine(x0val, y0val, x1val, y1val);
 			}
-			ian.end();
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -3328,17 +3344,17 @@ Interpreter::execByteCode()
 			int y0val = stack.popint();
 			int x0val = stack.popint();
 
-			QPainter ian(graphwin->image);
-			ian.setBrush(drawingbrush);
-			ian.setPen(drawingpen);
+			QPainter* ian = getGraphWinPainter();
+			ian->setBrush(drawingbrush);
+			ian->setPen(drawingpen);
 			if (drawingpen.color()==QColor(0,0,0,0) && drawingbrush.color()==QColor(0,0,0,0) ) {
-				ian.setCompositionMode(QPainter::CompositionMode_Clear);
+				ian->setCompositionMode(QPainter::CompositionMode_Clear);
 			}
 			if (x1val > 0 && y1val > 0)
 			{
-				ian.drawRect(x0val, y0val, x1val - 1, y1val - 1);
+				ian->drawRect(x0val, y0val, x1val - 1, y1val - 1);
 			}
-			ian.end();
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -3564,14 +3580,14 @@ Interpreter::execByteCode()
 			int yval = stack.popint();
 			int xval = stack.popint();
 
-			QPainter ian(graphwin->image);
-			ian.setPen(drawingpen);
-			ian.setBrush(drawingbrush);
+			QPainter* ian = getGraphWinPainter();
+			ian->setPen(drawingpen);
+			ian->setBrush(drawingbrush);
 			if (drawingpen.color()==QColor(0,0,0,0) && drawingbrush.color()==QColor(0,0,0,0) ) {
-				ian.setCompositionMode(QPainter::CompositionMode_Clear);
+				ian->setCompositionMode(QPainter::CompositionMode_Clear);
 			}
-			ian.drawEllipse(xval - rval, yval - rval, 2 * rval, 2 * rval);
-			ian.end();
+			ian->drawEllipse(xval - rval, yval - rval, 2 * rval, 2 * rval);
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -3597,15 +3613,15 @@ Interpreter::execByteCode()
 				if(i.isNull()) {
 					errornum = ERROR_IMAGEFILE;
 				} else {
-					QPainter ian(graphwin->image);
+					QPainter* ian = getGraphWinPainter();
 					if (rotate != 0 || scale != 1) {
 						QTransform transform = QTransform().translate(0,0).rotateRadians(rotate).scale(scale, scale);
 						i = i.transformed(transform);
 					}
 					if (i.width() != 0 && i.height() != 0) {
-						ian.drawImage((int)(x - .5 * i.width()), (int)(y - .5 * i.height()), i);
+						ian->drawImage((int)(x - .5 * i.width()), (int)(y - .5 * i.height()), i);
 					}
-					ian.end();
+					ian->end();
 					if (!fastgraphics) waitForGraphics();
 				}
 			}
@@ -3647,17 +3663,17 @@ Interpreter::execByteCode()
 			int y0val = stack.popint();
 			int x0val = stack.popint();
 
-			QPainter ian(graphwin->image);
-			ian.setPen(drawingpen);
-			ian.setBrush(drawingbrush);
+			QPainter* ian = getGraphWinPainter();
+			ian->setPen(drawingpen);
+			ian->setBrush(drawingbrush);
 			if (drawingpen.color()==QColor(0,0,0,0) && drawingbrush.color()==QColor(0,0,0,0) ) {
-				ian.setCompositionMode(QPainter::CompositionMode_Clear);
+				ian->setCompositionMode(QPainter::CompositionMode_Clear);
 			}
 			if(!fontfamily.isEmpty()) {
-				ian.setFont(QFont(fontfamily, fontpoint, fontweight));
+				ian->setFont(QFont(fontfamily, fontpoint, fontweight));
 			}
-			ian.drawText(x0val, y0val+(QFontMetrics(ian.font()).ascent()), txt);
-			ian.end();
+			ian->drawText(x0val, y0val+(QFontMetrics(ian->font()).ascent()), txt);
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -3698,12 +3714,12 @@ Interpreter::execByteCode()
 		{
 			op++;
 			
-			QPainter ian(graphwin->image);
-			ian.setPen(QColor(0,0,0,0));
-			ian.setBrush(QColor(0,0,0,0));
-			ian.setCompositionMode(QPainter::CompositionMode_Clear);
-			ian.drawRect(0, 0, graphwin->image->width(), graphwin->image->height());
-			ian.end();
+			QPainter* ian = getGraphWinPainter();
+			ian->setPen(QColor(0,0,0,0));
+			ian->setBrush(QColor(0,0,0,0));
+			ian->setCompositionMode(QPainter::CompositionMode_Clear);
+			ian->drawRect(0, 0, graphwin->image->width(), graphwin->image->height());
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -3715,14 +3731,14 @@ Interpreter::execByteCode()
 			int oneval = stack.popint();
 			int twoval = stack.popint();
 
-			QPainter ian(graphwin->image);
-			ian.setPen(drawingpen);
+			QPainter* ian = getGraphWinPainter();
+			ian->setPen(drawingpen);
 			if (drawingpen.color()==QColor(0,0,0,0)) {
-				ian.setCompositionMode(QPainter::CompositionMode_Clear);
+				ian->setCompositionMode(QPainter::CompositionMode_Clear);
 			}
 
-			ian.drawPoint(twoval, oneval);
-			ian.end();
+			ian->drawPoint(twoval, oneval);
+			ian->end();
 
 			if (!fastgraphics) waitForGraphics();
 		}
@@ -5042,12 +5058,12 @@ Interpreter::execByteCode()
 					// return the number of pixels the test string will require for diaplay
 					op++;
 					int w = 0;
-					QPainter ian(graphwin->image);
+					QPainter* ian = getGraphWinPainter();
 					if(!fontfamily.isEmpty()) {
-						ian.setFont(QFont(fontfamily, fontpoint, fontweight));
+						ian->setFont(QFont(fontfamily, fontpoint, fontweight));
 					}
-					w = QFontMetrics(ian.font()).ascent();
-					ian.end();
+					w = QFontMetrics(ian->font()).ascent();
+					ian->end();
 					stack.pushint((int) (w));
 				}
 				break;
@@ -5057,12 +5073,12 @@ Interpreter::execByteCode()
 					// return the number of pixels the test string will require for diaplay
 					op++;
 					int w = 0;
-					QPainter ian(graphwin->image);
+					QPainter* ian = getGraphWinPainter();
 					if(!fontfamily.isEmpty()) {
-						ian.setFont(QFont(fontfamily, fontpoint, fontweight));
+						ian->setFont(QFont(fontfamily, fontpoint, fontweight));
 					}
-					w = QFontMetrics(ian.font()).descent();
-					ian.end();
+					w = QFontMetrics(ian->font()).descent();
+					ian->end();
 					stack.pushint((int) (w));
 				}
 				break;
@@ -5073,12 +5089,12 @@ Interpreter::execByteCode()
 					op++;
 					QString txt = stack.popstring();
 					int w = 0;
-					QPainter ian(graphwin->image);
+					QPainter* ian = getGraphWinPainter();
 					if(!fontfamily.isEmpty()) {
-						ian.setFont(QFont(fontfamily, fontpoint, fontweight));
+						ian->setFont(QFont(fontfamily, fontpoint, fontweight));
 					}
-					w = QFontMetrics(ian.font()).width(txt);
-					ian.end();
+					w = QFontMetrics(ian->font()).width(txt);
+					ian->end();
 					stack.pushint((int) (w));
 				}
 				break;
@@ -5176,23 +5192,23 @@ Interpreter::execByteCode()
 					// transform to clockwise from 12'oclock
 					s = 1440-s-aw;
 
-					QPainter ian(graphwin->image);
-					ian.setPen(drawingpen);
-					ian.setBrush(drawingbrush);
+					QPainter* ian = getGraphWinPainter();
+					ian->setPen(drawingpen);
+					ian->setBrush(drawingbrush);
 					if (drawingpen.color()==QColor(0,0,0,0) && drawingbrush.color()==QColor(0,0,0,0) ) {
-						ian.setCompositionMode(QPainter::CompositionMode_Clear);
+						ian->setCompositionMode(QPainter::CompositionMode_Clear);
 					}
 					if(opcode==OPX_ARC) {
-						ian.drawArc(xval, yval, wval, hval, s, aw);
+						ian->drawArc(xval, yval, wval, hval, s, aw);
 					}
 					if(opcode==OPX_CHORD) {
-						ian.drawChord(xval, yval, wval, hval, s, aw);
+						ian->drawChord(xval, yval, wval, hval, s, aw);
 					}
 					if(opcode==OPX_PIE) {
-						ian.drawPie(xval, yval, wval, hval, s, aw);
+						ian->drawPie(xval, yval, wval, hval, s, aw);
 					}
 					
-					ian.end();
+					ian->end();
 
 					if (!fastgraphics) waitForGraphics();
 				}
@@ -5417,7 +5433,38 @@ Interpreter::execByteCode()
 				}
 				break;
 
+			case OPX_RECTIMG:
+				{
+					// Image saved into image buffer under a pseudo file name (so that it can be used by imgload, imgwidth, imgheight)
+					op++;
+					int heightval = stack.popint();
+					int widthval = stack.popint();
+					int yval = stack.popint();
+					int xval = stack.popint();
+					QString fileName = stack.popstring();
+					imageBuffer[fileName] = graphwin->image->copy(xval,yval,widthval,heightval);
+				}
+				break;
 
+			case OPX_CLIPPINGRECT:
+				{
+					// Sets the rectangle within the graph window into which graphical operations are able to paint to
+					op++;
+					clippingHeight = stack.popint();
+					clippingWidth = stack.popint();
+					clippingY = stack.popint();
+					clippingX = stack.popint();
+					isClippingActive = true;
+				}
+				break;
+
+			case OPX_CLIPPINGRESET:
+				{
+					// Resets the clipping to its default setting (clipping region is the complete graphsize)
+					op++;
+					isClippingActive = false;
+				}
+				break;
 
 				// insert additional extended operations here
 				

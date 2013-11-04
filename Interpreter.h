@@ -20,6 +20,7 @@
 
 #include <QPixmap>
 #include <QImage>
+#include <QPainter>
 #include <QThread>
 #include <QFile>
 #include <QDir>
@@ -139,6 +140,13 @@ class Interpreter : public QThread
   QString prgArgsString;
   std::map<QString,QImage> imageBuffer;
   QImage getImage(QString);
+  int clippingX;
+  int clippingY;
+  int clippingWidth;
+  int clippingHeight;
+  bool isClippingActive;
+  QPainter* getGraphWinPainter();
+  QPainter* graphWinPainter;
   bool isDebugRunning;
   int optype(int op);
   QString opname(int);
