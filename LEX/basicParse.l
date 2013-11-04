@@ -124,6 +124,8 @@ clickb [Cc][Ll][Ii][Cc][Kk][Bb]
 clickclear [Cc][Ll][Ii][Cc][Kk][Cc][Ll][Ee][Aa][Rr]
 clickx [Cc][Ll][Ii][Cc][Kk][Xx]
 clicky [Cc][Ll][Ii][Cc][Kk][Yy]
+clippingrect [Cc][Ll][Ii][Pp][Pp][Ii][Nn][Gg][Rr][Ee][Cc][Tt]
+clippingreset [Cc][Ll][Ii][Pp][Pp][Ii][Nn][Gg][Rr][Ee][Ss][Ee][Tt]
 close [Cc][Ll][Oo][Ss][Ee]
 cls [Cc][Ll][Ss]
 color [Cc][Oo][Ll][Oo][Rr]
@@ -265,6 +267,7 @@ read [Rr][Ee][Aa][Dd]
 readbyte [Rr][Ee][Aa][Dd][Bb][Yy][Tt][Ee]
 readline [Rr][Ee][Aa][Dd][Ll][Ii][Nn][Ee]
 rect [Rr][Ee][Cc][Tt]
+rectimg [Rr][Ee][Cc][Tt][Ii][Mm][Gg]
 red [Rr][Ee][Dd]
 redim [Rr][Ee][Dd][Ii][Mm]
 ref [Rr][Ee][Ff]
@@ -406,6 +409,8 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 {clickclear}	{ count(); return B256CLICKCLEAR; }
 {clickx}	{ count(); return B256CLICKX; }
 {clicky}	{ count(); return B256CLICKY; }
+{clippingrect}	{ count(); return B256CLIPPINGRECT; }
+{clippingreset}	{ count(); return B256CLIPPINGRESET; }
 {close}		{ count(); return B256CLOSE; }
 {cls}		{ count(); return B256CLS; }
 {color}		{ count(); return B256SETCOLOR; }
@@ -553,6 +558,7 @@ yellow [Yy][Ee][Ll][Ll][Oo][Ww]
 {readbyte}	{ count(); return B256READBYTE; }
 {readline}	{ count(); return B256READLINE; }
 {rect}		{ count(); return B256RECT; }
+{rectimg}		{ count(); return B256RECTIMG; }
 {red}		{ count(); return B256RED; }
 {redim}		{ count(); return B256REDIM; }
 {ref}		{ count(); return B256REF; }

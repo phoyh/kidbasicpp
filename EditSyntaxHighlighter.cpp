@@ -94,6 +94,8 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Cc][Ll][Ii][Cc][Kk][Cc][Ll][Ee][Aa][Rr]\\b"					// clickclear
 		<< "\\b[Cc][Ll][Ii][Cc][Kk][Xx]\\b"									// clickx
 		<< "\\b[Cc][Ll][Ii][Cc][Kk][Yy]\\b"									// clicky
+		<< "\\b[Cc][Ll][Ii][Pp][Pp][Ii][Nn][Gg][Rr][Ee][Cc][Tt]\\b"			// clippingrect
+		<< "\\b[Cc][Ll][Ii][Pp][Pp][Ii][Nn][Gg][Rr][Ee][Ss][Ee][Tt]\\b"		// clippingreset
 		<< "\\b[Cc][Ll][Gg]\\b"												// clg
 		<< "\\b[Cc][Ll][Oo][Ss][Ee]\\b"										// close
 		<< "\\b[Cc][Ll][Ss]\\b"												// cls
@@ -231,6 +233,7 @@ void EditSyntaxHighlighter::initKeywords()
 		<< "\\b[Rr][Ee][Aa][Dd][Bb][Yy][Tt][Ee]\\b"							// readbyte
 		<< "\\b[Rr][Ee][Aa][Dd][Ll][Ii][Nn][Ee]\\b"							// readline
 		<< "\\b[Rr][Ee][Cc][Tt]\\b"											// rect
+		<< "\\b[Rr][Ee][Cc][Tt][Ii][Mm][Gg]\\b"								// rectimg
 		<< "\\b[Rr][Ee][Dd][Ii][Mm]\\b"										// redim
 		<< "\\b[Rr][Ee][Ff][Rr][Ee][Ss][Hh]\\b"								// refresh
 		<< "\\b[Rr][Ee][Pp][Ll][Aa][Cc][Ee]\\b"								// replace

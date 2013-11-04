@@ -389,7 +389,7 @@ addStringOp(char op, char *data) {
 %token B256FROMBINARY B256FROMHEX B256FROMOCTAL B256FROMRADIX B256TOBINARY B256TOHEX B256TOOCTAL B256TORADIX
 %token B256DEBUGINFO
 %token B256CONTINUEDO B256CONTINUEFOR B256CONTINUEWHILE B256EXITDO B256EXITFOR B256EXITWHILE
-%token B256ARGS B256ABORT B256BREAKPOINT
+%token B256ARGS B256ABORT B256BREAKPOINT B256CLIPPINGRECT B256CLIPPINGRESET B256RECTIMG
 
 %union
 {
@@ -886,6 +886,9 @@ statement: gotostmt
 	| exitwhilestmt
 	| abortstmt
 	| breakpointstmt
+	| clippingrectstmt
+	| clippingresetstmt
+	| rectimgstmt
 ;
 
 dimstmt: B256DIM B256VARIABLE floatexpr {
@@ -1906,6 +1909,27 @@ graphvisiblestmt: B256GRAPHVISIBLE floatexpr { addExtendedOp(OPX_GRAPHVISIBLE); 
 ;
 
 outputvisiblestmt: B256OUTPUTVISIBLE floatexpr { addExtendedOp(OPX_OUTPUTVISIBLE); }
+;
+
+rectimgstmt: B256RECTIMG stringexpr ',' floatexpr ',' floatexpr ',' floatexpr ',' floatexpr {
+		addExtendedOp(OPX_RECTIMG);
+	} 
+	| B256RECTIMG '(' stringexpr ',' floatexpr ',' floatexpr ',' floatexpr ',' floatexpr ')' {
+		addExtendedOp(OPX_RECTIMG);
+	} 
+;
+
+clippingrectstmt: B256CLIPPINGRECT floatexpr ',' floatexpr ',' floatexpr ',' floatexpr {
+		addExtendedOp(OPX_CLIPPINGRECT);
+	} 
+	| B256CLIPPINGRECT '(' floatexpr ',' floatexpr ',' floatexpr ',' floatexpr ')' {
+		addExtendedOp(OPX_CLIPPINGRECT);
+	} 
+;
+
+clippingresetstmt: B256CLIPPINGRESET {
+		addExtendedOp(OPX_CLIPPINGRESET);
+	} 
 ;
 
 globalstmt: B256GLOBAL functionvariables {
