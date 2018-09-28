@@ -9,7 +9,7 @@ CONFIG						+=	 qt debug_and_release
 OBJECTS_DIR					=	tmp/obj
 MOC_DIR						=	tmp/moc
 
-QT						+=	webkit
+//QT						+=	webkit
 QT						+=	gui
 contains( QT_VERSION, "^5.*" ) {
 	QT						+=	widgets

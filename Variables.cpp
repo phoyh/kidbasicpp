@@ -242,7 +242,7 @@ void Variables::arraydim(b_type type, int varnum, int xdim, int ydim, bool redim
 			if (v->type != type || !redim || !v->arr) {
 				// if array data is dim or redim without a dim then create a new one (clear the old)
 				clearvariable(v);
-				v->arr = new array;
+				v->arr = new kb_array;
 			}
 			v->type = type;
 			v->arr->size = size;

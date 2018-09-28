@@ -24,7 +24,7 @@ struct arraydata {
   QString string;
 };
   
-struct array
+struct kb_array
 {
   int xdim;
   int ydim;
@@ -38,7 +38,7 @@ struct variable
   b_type type;
   QString string;
   double floatval; 
-  array *arr;
+  kb_array *arr;
 };
 
 
