@@ -1,3 +1,3 @@
-qmake BASIC256.pro -config release
+qmake BASIC256.pro -config debug
 make
 echo BUILD COMPLETE
