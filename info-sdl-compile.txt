@@ -1,0 +1,4 @@
+make sure that SDL mixer 1.2 is installed in /usr/includes/SDL by
+sudo apt-get install libsdl-mixer1.2-dev
+
+Apparently doesn't work with SDL2, so enforce 1.2 usage.
