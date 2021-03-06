@@ -8,3 +8,5 @@ LEX/basicParse.tab.h
 LEX/lex.yy.c
 BASIC256
 Makefile*
+.settings
+debug
